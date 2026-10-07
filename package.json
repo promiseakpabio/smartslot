@@ -1,0 +1,38 @@
+{
+  "engines" : {"node": ">=20"},
+  "scripts": {
+    "migrate": "node scripts/migrate.js",
+    "clashtest": "node scripts/clashTest.js",
+    "schedule": "node scripts/schedule.js",
+    "addreminders": "node scripts/addReminders.js",
+    "worker": "node scripts/worker.js",
+    "cancel": "node scripts/cancel.js",
+    "reminderdemo": "node scripts/reminderDemo.js",
+    "addai": "node scripts/addAi.js",
+    "generate": "node scripts/generateData.js",
+    "train": "node scripts/train.js",
+    "addfeedback": "node scripts/runSql.js db/feedback.sql",
+    "feedback": "node scripts/feedback.js",
+    "feedbackdemo": "node scripts/feedbackDemo.js",
+    "pastmeeting": "node scripts/pastMeeting.js",
+    "addauth": "node scripts/runSql.js db/auth.sql",
+    "server": "node server.js",
+    "apitest": "node scripts/apiTest.js",
+    "addrooms": "node scripts/runSql.js db/rooms.sql",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "commander": "^15.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "ml-random-forest": "^2.1.0",
+    "ml-regression-multivariate-linear": "^2.0.4",
+    "natural": "^8.1.1",
+    "node-cron": "^4.6.0",
+    "nodemailer": "^10.0.13",
+    "pg": "^8.23.1"
+  }
+}

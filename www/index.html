@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: http: https:; connect-src *">
+<title>SmartSlot</title>
+<style>
+:root{color-scheme:light dark;--ink:#16232d;--side:#183447;--side2:#244a61;--paper:#f2f5f7;--card:#fff;--line:#e0e6ea;--edge:#c3cdd4;--mute:#617482;--ac:#1e7d6b;--ac2:#166253;--acbg:#e3f3ef;--warn:#b4561b;--warnbg:#fbeee3;--sh:0 1px 2px rgba(16,35,45,.06),0 4px 14px rgba(16,35,45,.04)}
+@media(prefers-color-scheme:dark){:root{--ink:#e6edf1;--paper:#10181e;--card:#18232b;--line:#2a3944;--edge:#3a4b58;--mute:#9aabb7;--acbg:#16332d;--warnbg:#3a2418;--sh:none}}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{font:15px/1.5 "Segoe UI",system-ui,Roboto,Arial,sans-serif;color:var(--ink);background:var(--paper)}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+#app{display:flex;height:100%}
+aside{width:236px;background:var(--side);color:#e8eef2;display:flex;flex-direction:column;padding:22px 14px;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:700;padding:0 8px 26px}.logo{width:30px;height:30px;border-radius:8px;background:#5fd0b8;color:#0f2a36;display:grid;place-items:center}
+aside button{display:flex;align-items:center;gap:11px;width:100%;background:none;border:0;color:#bfd0db;font:inherit;padding:10px 12px;border-radius:8px;cursor:pointer;margin-bottom:3px}
+aside button:hover{background:var(--side2);color:#fff}aside button.on{background:var(--side2);color:#fff;font-weight:600;box-shadow:inset 3px 0 0 #5fd0b8}
+.who{margin-top:auto;font-size:12.5px;color:#9db3c1;padding:14px 8px 0;border-top:1px solid var(--side2)}.who b{display:block;color:#fff;font-size:14px}
+.wrap{flex:1;display:flex;flex-direction:column;min-width:0}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 36px;border-bottom:1px solid var(--line);background:var(--card)}
+header .d{color:var(--mute);font-size:13.5px}.av{width:36px;height:36px;border-radius:50%;background:var(--ac);color:#fff;border:0;font:inherit;font-weight:600;cursor:pointer}
+main{flex:1;overflow:auto;padding:30px 36px}
+.in{max-width:1000px}
+h1{font-size:25px;margin:0 0 4px;letter-spacing:-.01em}.lead{color:var(--mute);margin:0 0 24px}h3{margin:0 0 12px;font-size:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;margin-bottom:18px;box-shadow:var(--sh)}
+.cols{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;align-items:start}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:var(--sh)}.stat .ic{width:34px;height:34px;border-radius:9px;background:var(--acbg);color:var(--ac);display:grid;place-items:center;margin-bottom:10px}.stat b{font-size:26px;display:block;line-height:1.2}.stat span{color:var(--mute);font-size:13px}
+label{display:block;font-weight:600;font-size:13px;margin-bottom:5px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--edge);border-radius:8px;padding:10px 11px}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}.f{margin-bottom:16px}
+.btn{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:10px 18px;font:inherit;font-weight:600;cursor:pointer}.btn:hover{background:var(--ac2)}
+.btn.g{background:none;color:var(--ink);border:1px solid var(--edge)}.btn.s{padding:6px 12px;font-size:13px}
+.msg{border-radius:8px;padding:12px 14px;margin:0 0 16px;font-size:14px;border-left:4px solid var(--ac);background:var(--acbg)}.msg.bad{border-color:var(--warn);background:var(--warnbg)}
+.mr{display:flex;gap:14px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}.mr:first-of-type{border-top:0}
+.tb{width:64px;text-align:center;flex-shrink:0;font-weight:600;line-height:1.25}.tb small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.mi{flex:1;min-width:0}.mi b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hint{font-size:13px;color:var(--mute)}
+.dh{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--mute);font-weight:600;margin:20px 0 4px}.dh:first-child{margin-top:0}
+.pill{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--acbg);color:var(--ac);white-space:nowrap}.pill.x{background:var(--line);color:var(--mute)}.pill.n{background:var(--warnbg);color:var(--warn)}
+.chips{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}.chip{border:1px solid var(--edge);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;font:inherit;font-size:13.5px;cursor:pointer}.chip.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}.rc b{font-size:16px}.bar{height:6px;border-radius:3px;background:var(--line);margin:10px 0 6px}.bar i{display:block;height:100%;border-radius:3px;background:var(--ac)}
+.big{font-size:42px;font-weight:700;line-height:1.1}.steps{margin:0;padding-left:18px;color:var(--mute)}.steps li{margin-bottom:8px}.steps b{color:var(--ink)}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);font-size:14px}th{font-size:12.5px;color:var(--mute)}
+.empty{text-align:center;color:var(--mute);padding:26px 10px}
+.ov{position:fixed;inset:0;background:rgba(10,20,28,.55);display:grid;place-items:center;z-index:9;padding:16px}.md{background:var(--card);border-radius:14px;padding:24px;width:100%;max-width:440px}.ma{display:flex;gap:10px;justify-content:flex-end;margin-top:6px}
+.toast{position:fixed;right:22px;bottom:22px;background:var(--ink);color:var(--card);padding:12px 18px;border-radius:10px;z-index:10;max-width:340px;font-size:14px}.toast.bad{background:var(--warn);color:#fff}
+#login{display:grid;grid-template-columns:1.1fr 1fr;min-height:100%}
+.lp{background:var(--side);color:#e8eef2;padding:60px;display:flex;flex-direction:column;justify-content:center}.lb{font-size:32px;font-weight:700;margin-bottom:10px}.lp p{max-width:360px;color:#a9bfcc;margin:0 0 26px;font-size:16px}.lp li{margin-bottom:10px;color:#cfdde6;list-style:none;display:flex;gap:10px}.lp ul{padding:0;margin:0}.lp li:before{content:"";width:8px;height:8px;border-radius:50%;background:#5fd0b8;margin-top:8px;flex-shrink:0}
+.lf{padding:30px 8%;display:flex;flex-direction:column;justify-content:center;max-width:480px;width:100%;margin:0 auto}.lf h2{font-size:25px;margin:0 0 20px}
+@media(max-width:820px){#app{flex-direction:column-reverse}aside{width:100%;flex-direction:row;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--side2)}.brand,.who{display:none}aside button{flex:1;flex-direction:column;gap:3px;font-size:11px;padding:7px 2px;margin:0;justify-content:center;text-align:center}aside button.on{box-shadow:none}header{padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top,0px))}main{padding:20px 16px}.cols,.row{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}#login{grid-template-columns:1fr}.lp{padding:28px}.lb{font-size:24px}.lp ul{display:none}.big{font-size:34px}}
+</style></head><body>
+<div id="root"></div>
+<script>
+var S={api:localStorage.getItem('ss_api')||(location.protocol.indexOf('http')==0?location.origin:'http://localhost:3000'),tok:localStorage.getItem('ss_tok'),user:null,view:'home',chip:'all'};
+var root=document.getElementById('root'),$=function(i){return document.getElementById(i)};
+var IC={home:'M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',book:'M12 5v14M5 12h14',cal:'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',room:'M5 21V4h10v17M15 9h4v12M3 21h18',chart:'M4 20V10M10 20V4M16 20v-8M22 20H2',clock:'M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0',ok:'M5 12l5 5 9-10',pen:'M4 20h4L19 9l-4-4L4 16z',people:'M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 20v-2a4 4 0 0 0-3-3.9'};
+function ic(n){return'<svg class="i" viewBox="0 0 24 24"><path d="'+IC[n]+'"/></svg>'}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function api(p,m,b){return fetch(S.api.replace(/\/$/,'')+'/api'+p,{method:m||'GET',headers:Object.assign({'Content-Type':'application/json'},S.tok?{Authorization:'Bearer '+S.tok}:{}),body:b?JSON.stringify(b):undefined}).then(function(r){return r.json().then(function(j){if(r.status==401&&S.user)logout();return j})}).catch(function(){return{error:'Cannot reach the server at '+S.api+'. Check the server address.'}})}
+var tm=function(d){return new Date(d).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})};
+function dl(d){var x=new Date(d),t=new Date(),n=function(a){return new Date(a.getFullYear(),a.getMonth(),a.getDate())},k=Math.round((n(x)-n(t))/864e5);return k==0?'Today':k==1?'Tomorrow':k==-1?'Yesterday':x.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}
+function msg(t,bad){return'<div class="msg'+(bad?' bad':'')+'">'+esc(t)+'</div>'}
+function toast(t,bad){var e=document.createElement('div');e.className='toast'+(bad?' bad':'');e.textContent=t;document.body.appendChild(e);setTimeout(function(){e.remove()},3600)}
+function modal(title,body,ok,fn){var m=document.createElement('div');m.className='ov';m.innerHTML='<div class="md"><h3>'+title+'</h3>'+body+'<div id="me"></div><div class="ma"><button class="btn g" id="mc">Cancel</button><button class="btn" id="mk">'+ok+'</button></div></div>';document.body.appendChild(m);m.querySelector('#mc').onclick=function(){m.remove()};m.querySelector('#mk').onclick=function(){fn(function(){m.remove()},function(t){m.querySelector('#me').innerHTML=msg(t,1)})}}
+function logout(){S.tok=null;S.user=null;localStorage.removeItem('ss_tok');loginView()}
+
+function loginView(){
+ root.innerHTML='<div id="login"><div class="lp"><div class="lb">SmartSlot</div><p>Meeting scheduling that learns how long your meetings really take.</p><ul><li>Books rooms with no clashes</li><li>Predicts the real length of each meeting</li><li>Gets better with every piece of feedback</li></ul></div><div class="lf"><h2>Sign in</h2><div id="lm"></div><div class="f" id="nm" style="display:none"><label>Full name</label><input id="n"></div><div class="f"><label>Email</label><input id="e" type="email"></div><div class="f"><label>Password</label><input id="p" type="password"></div><div class="f"><label>Server address</label><input id="u" value="'+esc(S.api)+'"><div class="hint">Where the SmartSlot server is running.</div></div><div><button class="btn" id="go">Log in</button> <button class="btn g" id="sw">Create account</button></div></div></div>';
+ var reg=false;
+ $('sw').onclick=function(){reg=!reg;$('nm').style.display=reg?'block':'none';this.textContent=reg?'I have an account':'Create account';$('go').textContent=reg?'Register':'Log in'};
+ $('go').onclick=function(){S.api=$('u').value.trim();localStorage.setItem('ss_api',S.api);var b={email:$('e').value,password:$('p').value};if(reg)b.name=$('n').value;
+  api('/auth/'+(reg?'register':'login'),'POST',b).then(function(r){if(r.error)return $('lm').innerHTML=msg(r.error,1);S.tok=r.token;S.user=r.user;localStorage.setItem('ss_tok',r.token);shell('home')})};
+}
+function shell(v){
+ S.view=v;var a=S.user.role=='admin',N=[['home','Home','home'],['book','Book a meeting','book'],['mine','Schedule','cal'],['rooms',a?'Rooms':'Rooms','room']].concat(a?[['model','AI model','chart']]:[]);
+ root.innerHTML='<div id="app"><aside><div class="brand"><span class="logo">'+ic('cal')+'</span>SmartSlot</div>'+N.map(function(i){return'<button data-v="'+i[0]+'" class="'+(i[0]==v?'on':'')+'">'+ic(i[2])+'<span>'+i[1]+'</span></button>'}).join('')+'<div class="who"><b>'+esc(S.user.name)+'</b>'+(a?'Administrator':'Staff')+'</div></aside><div class="wrap"><header><span class="d">'+new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</span><button class="av" id="av" title="Sign out">'+esc(S.user.name.trim().charAt(0).toUpperCase())+'</button></header><main><div class="in" id="m"></div></main></div></div>';
+ document.querySelector('aside').onclick=function(e){var b=e.target.closest('button');if(b)shell(b.getAttribute('data-v'))};
+ $('av').onclick=function(){modal('Sign out?','<p class="hint">You will need to log in again.</p>','Sign out',function(c){c();logout()})};
+ ({home:home,book:book,mine:mine,rooms:rooms,model:model})[v]();
+}
+function head(t,l){return'<h1>'+t+'</h1><p class="lead">'+l+'</p>'}
+function row(x,act){var st=x.status=='cancelled'?'<span class="pill x">Cancelled</span>':x.needs_feedback?'<span class="pill n">Needs feedback</span>':x.status=='completed'?'<span class="pill x">Completed</span>':'<span class="pill">Scheduled</span>';
+ return'<div class="mr"><div class="tb">'+tm(x.start_time)+'<small>'+tm(x.end_time)+'</small></div><div class="mi"><b>'+esc(x.title)+'</b><span class="hint">'+esc(x.venue)+' · '+x.attendees+' people'+(x.predicted_minutes?' · predicted '+x.predicted_minutes+' min':'')+'</span></div>'+st+(act||'')+'</div>'}
+function home(){
+ var h=new Date().getHours(),g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+ $('m').innerHTML=head(g+', '+esc(S.user.name.split(' ')[0]),'Here is what is happening with your meetings.')+'<div class="stats" id="st"></div><div class="cols"><div class="card"><h3>Coming up</h3><div id="up"><p class="hint">Loading…</p></div></div><div class="card"><h3>Waiting for your feedback</h3><div id="nf"><p class="hint">Loading…</p></div></div></div>';
+ api('/summary').then(function(s){if(s.error)return;var c=[['today','Today','clock'],['upcoming','Upcoming','cal'],['awaiting_feedback','Need feedback','pen'],['attendance_rate','Attendance %','people']];
+  $('st').innerHTML=c.map(function(k){return'<div class="stat"><div class="ic">'+ic(k[2])+'</div><b>'+(s[k[0]]==null?'–':s[k[0]])+'</b><span>'+k[1]+'</span></div>'}).join('')});
+ api('/bookings').then(function(r){var b=r.bookings||[],now=new Date(),up=b.filter(function(x){return x.status=='scheduled'&&new Date(x.start_time)>=now}).sort(function(a,c){return new Date(a.start_time)-new Date(c.start_time)}).slice(0,5),nf=b.filter(function(x){return x.needs_feedback}).slice(0,4);
+  $('up').innerHTML=up.length?up.map(function(x){return row(x)}).join(''):'<div class="empty">Nothing booked yet.<br><button class="btn s" style="margin-top:10px" onclick="shell(\'book\')">Book a meeting</button></div>';
+  $('nf').innerHTML=nf.length?nf.map(function(x){return'<div class="mr"><div class="mi"><b>'+esc(x.title)+'</b><span class="hint">'+dl(x.start_time)+'</span></div><button class="btn s" onclick="shell(\'mine\')">Give feedback</button></div>'}).join(''):'<div class="empty">All caught up.</div>'})
+}
+function book(){
+ $('m').innerHTML=head('Book a meeting','Tell us about the meeting. SmartSlot picks a room and time and estimates how long it will really take.')+'<div class="cols"><div class="card"><div id="bm"></div><div class="f"><label>Meeting title</label><input id="t" placeholder="e.g. Budget review with the finance team"></div><div class="f"><label>Number of people</label><input id="a" type="number" min="1"></div><div class="row"><div class="f"><label>Room</label><select id="r"><option value="">Choose for me</option></select></div><div class="f"><label>Date</label><input id="d" type="date"></div></div><div class="row"><div class="f"><label>Start time</label><input id="f" type="time"></div><div class="f"><label>End time</label><input id="to" type="time"></div></div><button class="btn" id="b1">Book meeting</button> <span id="ex"></span></div><div class="card"><h3>What happens next</h3><ol class="steps"><li><b>Room.</b> The smallest room that fits your group is chosen.</li><li><b>Length.</b> SmartSlot estimates how long it will really take from past meetings.</li><li><b>Reminders.</b> You are reminded a day, two hours and 30 minutes before.</li><li><b>Feedback.</b> Tell us how it went and the estimates get better.</li></ol></div></div>';
+ $('d').min=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+ api('/venues').then(function(r){$('r').innerHTML+=(r.venues||[]).map(function(v){return'<option>'+esc(v.name)+'</option>'}).join('')});
+ function send(x){var g=function(i){return $(i).value},b=Object.assign({title:g('t'),attendees:g('a'),room:g('r'),date:g('d'),from:g('f'),to:g('to')},x||{});Object.keys(b).forEach(function(k){if(b[k]==='')delete b[k]});
+  if(b.from&&b.to&&b.to<=b.from){$('ex').innerHTML='';return $('bm').innerHTML=msg('The end time must be after the start time.',1)}
+  if((b.from&&!b.to)||(!b.from&&b.to)){$('ex').innerHTML='';return $('bm').innerHTML=msg('Give both a start time and an end time, or leave both empty.',1)}
+  api('/bookings','POST',b).then(function(r){var o=$('bm'),e=$('ex');e.innerHTML='';if(r.error)return o.innerHTML=msg(r.error,1);
+   if(r.ok){o.innerHTML=msg('Booked: '+r.bookings.map(function(k){return k.venue+', '+dl(k.start)+' '+tm(k.start)+' to '+tm(k.end)}).join(' | '))+(r.notes||[]).concat(r.note?[r.note]:[]).map(function(n){return'<p class="hint">'+esc(n)+'</p>'}).join('');toast('Meeting booked');return}
+   o.innerHTML=msg(r.reason,1)+(r.options&&r.options.length?'<p class="hint">You could:</p><ul>'+r.options.map(function(n){return'<li>'+esc(n)+'</li>'}).join('')+'</ul>':'');
+   e.innerHTML='<button class="btn g" id="fo">Book it anyway</button>'+(r.needsSplit?' <button class="btn g" id="sp">Split into sessions</button>':'');$('fo').onclick=function(){send({force:true})};if($('sp'))$('sp').onclick=function(){send({split:true})}})}
+ $('b1').onclick=function(){send()};
+}
+function mine(){
+ $('m').innerHTML=head('Schedule','Move or cancel a meeting, and give feedback once it has taken place.')+'<div class="chips" id="ch"></div><div class="card" id="ls"><p class="hint">Loading…</p></div>';
+ var C=[['all','All'],['up','Upcoming'],['fb','Needs feedback'],['cx','Cancelled']];
+ api('/bookings').then(function(r){var all=r.bookings||[],now=new Date();
+  function draw(){$('ch').innerHTML=C.map(function(c){return'<button class="chip'+(S.chip==c[0]?' on':'')+'" data-c="'+c[0]+'">'+c[1]+'</button>'}).join('');
+   var L=all.filter(function(x){return S.chip=='up'?x.status=='scheduled'&&new Date(x.start_time)>=now:S.chip=='fb'?x.needs_feedback:S.chip=='cx'?x.status=='cancelled':true}).sort(function(a,b){return new Date(b.start_time)-new Date(a.start_time)}),last='',h='';
+   L.forEach(function(x){var d=dl(x.start_time);if(d!=last){h+='<div class="dh">'+d+'</div>';last=d}
+    var a=x.status=='scheduled'?(x.needs_feedback?'<button class="btn s" data-a="fb" data-i="'+x.id+'">Feedback</button>':'<button class="btn s g" data-a="rs" data-i="'+x.id+'">Move</button><button class="btn s g" data-a="cx" data-i="'+x.id+'">Cancel</button>'):'';
+    h+=row(x,'<span style="display:flex;gap:6px">'+a+'</span>')});
+   $('ls').innerHTML=h||'<div class="empty">No meetings here.</div>'}
+  draw();
+  $('ch').onclick=function(e){var c=e.target.getAttribute('data-c');if(c){S.chip=c;draw()}};
+  $('ls').onclick=function(e){var a=e.target.getAttribute('data-a'),id=e.target.getAttribute('data-i');if(!a)return;
+   if(a=='cx')modal('Cancel this meeting?','<p class="hint">The room is freed and reminders are switched off.</p>','Yes, cancel',function(c,er){api('/bookings/'+id+'/cancel','POST').then(function(r){if(r.error)return er(r.error);c();toast(r.message);mine()})});
+   if(a=='fb')modal('How did it go?','<div class="f"><textarea id="ft" rows="3" placeholder="e.g. It lasted 55 minutes and 10 people came"></textarea></div>','Send feedback',function(c,er){api('/bookings/'+id+'/feedback','POST',{text:$('ft').value}).then(function(r){if(r.error)return er(r.error);c();toast('Thank you. Understood '+r.understood.minutes+' min, '+r.understood.attendees+' people.');mine()})});
+   if(a=='rs')modal('Move this meeting','<div class="f"><label>Date</label><input id="rd" type="date"></div><div class="row"><div class="f"><label>Start</label><input id="rf" type="time"></div><div class="f"><label>End</label><input id="rt" type="time"></div></div>','Move meeting',function(c,er){api('/bookings/'+id+'/reschedule','POST',{date:$('rd').value,from:$('rf').value,to:$('rt').value}).then(function(r){if(r.error)return er(r.error);if(r.ok===false)return er(r.reason+' '+(r.kept||''));c();toast('Meeting moved');mine()})})}})
+}
+function rooms(){
+ var a=S.user.role=='admin';
+ $('m').innerHTML=head('Rooms','The rooms people can book.')+('<div class="card"><h3>Add a room</h3><div id="rm"></div><div class="row"><div class="f"><label>Room name</label><input id="rn"></div><div class="f"><label>Capacity</label><input id="rc" type="number" min="1"></div></div><button class="btn" id="ra">Add room</button></div>')+'<div class="rg" id="rg"></div>';
+ function load(){api('/venues').then(function(r){var v=window.RV=r.venues||[],mx=Math.max.apply(null,v.map(function(x){return x.capacity}).concat([1]));$('rg').innerHTML=v.map(function(x,i){return'<div class="card rc"><b>'+esc(x.name)+'</b><div class="bar"><i style="width:'+Math.round(x.capacity/mx*100)+'%"></i></div><span class="hint">Holds '+x.capacity+' people</span>'+(x.private?' <span class="pill x">'+(a&&x.owner?'Private to '+esc(x.owner):'Private')+'</span>':'')+(a?'<div style="margin-top:12px"><button class="btn s g" data-e="'+i+'">Edit</button></div>':'')+'</div>'}).join('')})}load();
+ if(a)$('rg').onclick=function(e){var i=e.target.getAttribute('data-e');if(i===null)return;var x=window.RV[i];modal('Edit room','<div class="f"><label>Room name</label><input id="en" value="'+esc(x.name)+'"></div><div class="f"><label>Capacity</label><input id="ec" type="number" min="1" value="'+x.capacity+'"></div>','Save',function(c,er){api('/venues/'+x.id,'PATCH',{name:$('en').value,capacity:$('ec').value}).then(function(r){if(r.error)return er(r.error);c();toast('Room updated');load()})})};
+ $('ra').onclick=function(){api('/venues','POST',{name:$('rn').value,capacity:$('rc').value}).then(function(r){$('rm').innerHTML=r.error?msg(r.error,1):'';if(!r.error){toast('Added '+r.venue.name);$('rn').value='';$('rc').value='';load()}})};
+}
+function model(){
+ $('m').innerHTML=head('AI model','How the duration model is performing and which version is in use.')+'<div id="mo"></div>';
+ function load(){api('/model').then(function(r){if(r.error)return $('mo').innerHTML=msg(r.error,1);var a=r.active;
+  $('mo').innerHTML='<div class="stats"><div class="stat"><div class="ic">'+ic('chart')+'</div><b>'+(a?'v'+a.version:'–')+'</b><span>Version in use</span></div><div class="stat"><div class="ic">'+ic('clock')+'</div><b>'+(a?a.mae:'–')+'</b><span>Average error (min)</span></div><div class="stat"><div class="ic">'+ic('book')+'</div><b>'+r.trainingExamples+'</b><span>Training meetings</span></div><div class="stat"><div class="ic">'+ic('ok')+'</div><b>'+(a?a.n_feedback:0)+'</b><span>From feedback</span></div></div><div class="card"><h3>Retraining</h3><p class="hint">'+(a?esc(a.note||''):'No model has been trained yet.')+'</p>'+(r.training?'<div class="msg">Training is running. This page refreshes itself.</div>':'<button class="btn" id="rt">Retrain now</button>')+'</div><div class="card"><h3>Version history</h3><table><thead><tr><th>Version</th><th>Trained on</th><th>Average error</th><th>Status</th></tr></thead><tbody>'+(r.versions||[]).slice().reverse().map(function(v){return'<tr><td>v'+v.version+'</td><td>'+v.n_train+' meetings</td><td>'+v.mae+' min</td><td>'+(v.is_active?'<span class="pill">In use</span>':'')+'</td></tr>'}).join('')+'</tbody></table></div>';
+  if($('rt'))$('rt').onclick=function(){api('/model/retrain','POST').then(function(){toast('Retraining started');load()})};
+  if(r.training&&S.view=='model')setTimeout(load,4000)})}load();
+}
+if(S.tok){api('/auth/me').then(function(r){if(r.user){S.user=r.user;shell('home')}else loginView()})}else loginView();
+</script></body></html>
